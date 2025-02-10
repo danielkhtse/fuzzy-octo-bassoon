@@ -576,6 +576,13 @@ export async function search(
     );
   }
 
+  if (params.patientId) {
+    const searchTerm = params.patientId as string;
+    filteredData = filteredData.filter((item) =>
+      item.patientId?.includes(searchTerm)
+    );
+  }
+
   if (params.sampleBarcode) {
     const searchTerm = (params.sampleBarcode as string).toLowerCase();
     filteredData = filteredData.filter((item) =>
