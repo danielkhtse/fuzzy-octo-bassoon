@@ -556,14 +556,55 @@ export async function search(
     })),
   };
 
+  let filteredData = responseData.data;
+
+  // Apply search filters if present
+  if (params.patientName) {
+    const searchTerm = (params.patientName as string).toLowerCase();
+    filteredData = filteredData.filter((item) =>
+      item.patientName?.toLowerCase().includes(searchTerm)
+    );
+  }
+
+  if (params.sampleBarcode) {
+    const searchTerm = (params.sampleBarcode as string).toLowerCase();
+    filteredData = filteredData.filter((item) =>
+      item.sampleBarcode?.toLowerCase().includes(searchTerm)
+    );
+  }
+
+  if (params.activationDate) {
+    const searchDate = (params.activationDate as string).split(' ')[0];
+    filteredData = filteredData.filter((item) =>
+      item.activationDate.startsWith(searchDate)
+    );
+  }
+
+  if (params.resultDate) {
+    const searchDate = (params.resultDate as string).split(' ')[0];
+    filteredData = filteredData.filter((item) =>
+      item.resultDate.startsWith(searchDate)
+    );
+  }
+
+  if (params.resultValue) {
+    const searchTerm = (params.resultValue as string).toLowerCase();
+    filteredData = filteredData.filter(
+      (item) => item.resultValue.toLowerCase() === searchTerm
+    );
+  }
+
+  // Update total count to reflect filtered results
+  responseData.meta.total = filteredData.length;
+
   // Apply pagination from query params
   const limit = params.page?.limit ? parseInt(params.page.limit as string) : 20;
   const offset = params.page?.offset
     ? parseInt(params.page.offset as string)
     : 0;
 
-  // Slice the response data array based on pagination params
-  responseData.data = responseData.data.slice(offset, offset + limit);
+  // Use the filtered data for pagination
+  responseData.data = filteredData.slice(offset, offset + limit);
 
   return responseData;
 }
