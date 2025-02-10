@@ -539,7 +539,7 @@ export async function search(
     ],
   };
 
-  const responseData = {
+  let responseData = {
     meta: {
       total: data.data.length,
     },
@@ -553,8 +553,18 @@ export async function search(
       activationDate: item.attributes.activateTime,
       resultDate: item.attributes.resultTime,
       resultValue: item.attributes.result,
+      patientId: data.included.find(
+        (inc) => inc.id === item.relationships.profile.data.id
+      )?.id,
+      resultType: item.attributes.resultType,
     })),
   };
+
+  if (organisation.name !== 'Circle') {
+    responseData.data = responseData.data.map(
+      ({ resultType, patientId, ...rest }) => rest
+    );
+  }
 
   let filteredData = responseData.data;
 
