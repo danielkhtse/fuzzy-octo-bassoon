@@ -560,10 +560,11 @@ export async function search(
     })),
   };
 
-  if (organisation.name !== 'Circle') {
+  type ResponseDataType = (typeof responseData.data)[0];
+  if (organisation.name != 'Circle') {
     responseData.data = responseData.data.map(
       ({ resultType, patientId, ...rest }) => rest
-    );
+    ) as ResponseDataType[];
   }
 
   let filteredData = responseData.data;
@@ -608,6 +609,13 @@ export async function search(
     const searchTerm = (params.resultValue as string).toLowerCase();
     filteredData = filteredData.filter(
       (item) => item.resultValue.toLowerCase() === searchTerm
+    );
+  }
+
+  if (params.resultType) {
+    const searchTerm = (params.resultType as string).toLowerCase();
+    filteredData = filteredData.filter(
+      (item) => item.resultType.toLowerCase() === searchTerm
     );
   }
 
