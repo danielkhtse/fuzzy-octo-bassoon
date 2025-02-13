@@ -219,17 +219,87 @@
         ],
         "responses": {
           "200": {
-            "description": "results",
+            "description": "successful operation",
             "content": {
               "application/json": {
                 "schema": {
-                  "$ref": "#/components/schemas/ManySamples"
+                  "type": "object",
+                  "properties": {
+                    "meta": {
+                      "type": "object",
+                      "properties": {
+                        "total": {
+                          "type": "integer",
+                          "minimum": 0
+                        }
+                      }
+                    },
+                    "data": {
+                      "type": "array",
+                      "items": {
+                        "type": "object",
+                        "properties": {
+                          "id": {
+                            "type": "string",
+                            "format": "uuid"
+                          },
+                          "type": {
+                            "type": "string",
+                            "enum": [
+                              "sample"
+                            ]
+                          },
+                          "patientName": {
+                            "type": "string"
+                          },
+                          "patientId": {
+                            "type": "string",
+                            "format": "uuid"
+                          },
+                          "sampleBarcode": {
+                            "type": "string"
+                          },
+                          "activationDate": {
+                            "type": "string",
+                            "format": "date-time"
+                          },
+                          "resultType": {
+                            "type": "string",
+                            "enum": [
+                              "rtpcr",
+                              "antigen",
+                              "antibody",
+                              "rtlamp",
+                              "coyote"
+                            ]
+                          },
+                          "resultDate": {
+                            "type": "string",
+                            "format": "date-time"
+                          },
+                          "resultValue": {
+                            "type": "string",
+                            "enum": [
+                              "negative",
+                              "positive"
+                            ]
+                          }
+                        }
+                      }
+                    }
+                  }
                 }
               }
             }
           },
-          "501": {
-            "description": "to be implemented"
+          "400": {
+            "description": "Invalid request parameters"
+          },
+          "404": {
+            "description": "Organisation not found"
+          },
+          "500": {
+            "description": "Internal server error"
           }
         }
       }
