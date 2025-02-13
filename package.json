@@ -51,7 +51,7 @@
         "@types/mocha": "^8.0.3",
         "@types/node": "^10.12.26",
         "@types/request-promise": "^4.1.42",
-        "@types/sinon": "^17.0.3",
+        "@types/sinon": "^7.5.0",
         "@types/uuid": "^3.4.4",
         "chai": "^4.2.0",
         "mocha": "^7.1.1",
