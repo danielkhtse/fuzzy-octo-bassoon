@@ -1,4 +1,3 @@
-import { Request } from 'express';
 import { EntityManager } from 'typeorm';
 import { Organisation } from '../entity/organisation';
 import { Result } from '../entity/result';
@@ -30,10 +29,24 @@ export function mapResultToResponse(
     : baseData;
 }
 
+export interface SearchParams {
+  page?: {
+    offset?: string;
+    limit?: string;
+  };
+  sampleId?: string;
+  patientName?: string;
+  activateTime?: string;
+  resultTime?: string;
+  resultValue?: string;
+  resultType?: string;
+  patientId?: string;
+}
+
 export async function search(
   manager: EntityManager,
   organisation: Organisation,
-  params: Request['query']
+  params: SearchParams
 ) {
   const sampleRepository = manager.getRepository(Result);
   let query = sampleRepository
@@ -51,15 +64,15 @@ export async function search(
     });
   }
 
-  if (params.sampleBarcode) {
-    const sampleBarcode = (params.sampleBarcode as string).toLowerCase();
-    query = query.andWhere('LOWER(sample.sampleId) LIKE :sampleBarcode', {
-      sampleBarcode: `%${sampleBarcode}%`,
+  if (params.sampleId) {
+    const sampleId = (params.sampleId as string).toLowerCase();
+    query = query.andWhere('LOWER(sample.sampleId) LIKE :sampleId', {
+      sampleId: `%${sampleId}%`,
     });
   }
 
-  if (params.activationDate) {
-    const activationDate = new Date(params.activationDate as string);
+  if (params.activateTime) {
+    const activationDate = new Date(params.activateTime as string);
     const nextDay = new Date(activationDate);
     nextDay.setDate(activationDate.getDate() + 1);
     query = query.andWhere(
@@ -71,14 +84,14 @@ export async function search(
     );
   }
 
-  if (params.resultDate) {
-    const resultDate = new Date(params.resultDate as string);
-    const nextDay = new Date(resultDate);
-    nextDay.setDate(resultDate.getDate() + 1);
+  if (params.resultTime) {
+    const resultTime = new Date(params.resultTime as string);
+    const nextDay = new Date(resultTime);
+    nextDay.setDate(resultTime.getDate() + 1);
     query = query.andWhere(
-      'sample.resultTime >= :resultDate AND sample.resultTime < :nextDay',
+      'sample.resultTime >= :resultTime AND sample.resultTime < :nextDay',
       {
-        resultDate: resultDate.toISOString(),
+        resultTime: resultTime.toISOString(),
         nextDay: nextDay.toISOString(),
       }
     );

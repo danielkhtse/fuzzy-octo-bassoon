@@ -274,7 +274,7 @@ describe('search', () => {
       ]);
 
       const result = await search(mockManager, MOCK_ORG_CIRCLE, {
-        sampleBarcode: '123e4567-e89b-12d3-a456-426614174006',
+        sampleId: '123e4567-e89b-12d3-a456-426614174006',
       });
 
       expect(result.data).to.have.lengthOf(mockResult.length);
@@ -301,7 +301,7 @@ describe('search', () => {
       ]);
 
       const result = await search(mockManager, MOCK_ORG_CIRCLE, {
-        activationDate: filterDate,
+        activateTime: filterDate,
       });
       expect(result.data).to.have.lengthOf(1);
       expect(
@@ -328,7 +328,7 @@ describe('search', () => {
       ]);
 
       const result = await search(mockManager, MOCK_ORG_CIRCLE, {
-        resultDate: filterDate,
+        resultTime: filterDate,
       });
       expect(result.data).to.have.lengthOf(1);
       expect(result.data[0].resultDate.toISOString().split('T')[0]).to.equal(
