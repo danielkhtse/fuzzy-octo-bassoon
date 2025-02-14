@@ -26,7 +26,6 @@ describe('search', () => {
     organisationId: '123e4567-e89b-12d3-a456-426614174001',
   } as Organisation;
 
-  // Update testData to use the constants
   const testData: Partial<Result>[] = [
     {
       resultId: '123e4567-e89b-12d3-a456-426614174004',
